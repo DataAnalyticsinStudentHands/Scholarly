@@ -1,11 +1,26 @@
+set_parameter <- function(varname,default) {
+  env.var = Sys.getenv(varname)
+  if(env.var != '' & !missing(default)) {
+    return(env.var)
+  } else if(!missing(default)) {
+    return(default)
+  } else {
+    return()
+  }
+}
 connect_mongo <- function(collection, suffix, url=hosturl) {
+  if(!exists("hosturl")){
+    url="mongodb://localhost/scholarly"
+  }
+  host <- str_extract(url, '(?<=(mongodb://))\\w+')
+  
   if(missing(suffix)){
     target_collection <- collection
   } else {
-  target_collection <- paste(collection, suffix, sep = "_")
+    target_collection <- paste(collection, suffix, sep = "_")
   }
   connection <-  mongo(collection=target_collection,url=url)
-  print(glue("Connected: {target_collection}"))
+  print(glue("Connected: {host}://{target_collection}"))
   return(connection)
 }
 
@@ -38,7 +53,6 @@ isScrapeComplete <- function(gsid) {
     return(completeness)
   }
 }
-
 updateDocValue <-
   function(collection, id, field, value, idType = 'string') {
     if (idType == 'string') {
@@ -47,8 +61,12 @@ updateDocValue <-
       mongoID <- paste0('{"_id": { "$oid" : "', id, '" } }')
     }
     core <- paste0(field, '":', toJSON(value, auto_unbox = T))
-    set <- paste0('{"$set":{"', core, '}}')
-    collection$update(mongoID, set)
+    if(is.na(value) || is.null(value) || value == 'unset'){
+      payload <- paste0('{"$unset":{"', field, '":1}}')
+    } else {
+      payload <- paste0('{"$set":{"', core, '}}')
+    }
+    collection$update(mongoID, payload)
   }
 
 updateStatus <- function(scholar_ids) {

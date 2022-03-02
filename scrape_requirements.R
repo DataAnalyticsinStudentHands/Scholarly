@@ -5,6 +5,7 @@ library(rvest)
 library(logr) 
 library(glue)
 library(stringr)
+library(jsonlite)
 `%!in%` <- Negate(`%in%`)
 
 

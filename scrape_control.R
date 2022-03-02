@@ -1,26 +1,22 @@
 #Load packages and scripts
 source("scrape_requirements.R")
 
-scrape_from_file = FALSE
-enableFarmerFilter = TRUE
-farmer_id = 'fallback'
-
 # collection_suffix <- "ERL" #Option to set manually if not on a farm machine.
 # Authentication and host URL
 #Specify url in environment
 #Sys.setenv(MONGOURL = "mongodb://localhost:27017/scholarball")
-hosturl = Sys.getenv("MONGOURL")
-project_dir = Sys.getenv("PROJECT_DIR")
+hosturl = set_parameter("MONGOURL")
+project_dir = set_parameter("PROJECT_DIR", getwd())
 log_tmp_dir = file.path(project_dir,'log')
-collection_suffix = Sys.getenv("COLLECTION_SUFFIX")
-farmer_id = Sys.getenv("FARMER_ID")
+collection_suffix = set_parameter("COLLECTION_SUFFIX")
+farmer_id = set_parameter("FARMER_ID", Sys.info()["nodename"][[1]])
 
 #Define mongo connections
 
 {
   scholarDB <- connect_mongo(collection="scholars", suffix=collection_suffix)
-  publicationsDB <- connect_mongo(collection="publications",suffix='consolidated')
-  google_profilesDB <- connect_mongo(collection="googleProfiles",suffix='consolidated')
+  publicationsDB <- connect_mongo(collection="googlePublications")
+  google_profilesDB <- connect_mongo(collection="googleProfiles")
 }
 
 date <- as.character(format.Date(Sys.Date(), "%m-%d-%Y"))
