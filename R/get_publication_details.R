@@ -91,11 +91,11 @@ get_publication_details <- function (gsid, pubid)
     clusterID <- unique(clusterID[!is.na(clusterID)])
     clusterID <- paste(clusterID, collapse=',')
     
-    tryCatch({title_link <- doc %>% html_nodes('.gsc_oci_title_link') %>% html_attr('href') %>% replace0}, 
+    tryCatch({title_link <- doc %>% html_node('.gsc_oci_title_link') %>% html_attr('href') %>% replace0}, 
              error=function(e) {title_link <- NA_character_})
-    tryCatch({sidebar_link <- doc %>% html_nodes('.gsc_oci_title_ggi') %>% html_node('a') %>% html_attr('href') %>% replace0}, 
+    tryCatch({sidebar_link <- doc %>% html_node('.gsc_oci_title_ggi') %>% html_node('a') %>% html_attr('href') %>% replace0}, 
              error=function(e) {title_link <- NA_character_})
-    tryCatch({sidebar_link_type <- doc %>% html_nodes('.gsc_vcd_title_ggt')  %>% html_text() %>% gsub('\\W', '',.) %>% replace0}, 
+    tryCatch({sidebar_link_type <- doc %>% html_node('.gsc_vcd_title_ggt')  %>% html_text() %>% gsub('\\W', '',.) %>% replace0}, 
              error=function(e) {title_link <- NA_character_})
     
     

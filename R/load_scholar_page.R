@@ -41,6 +41,7 @@ load_scholar_page <- function(gsid, cstart, scholar_id) {
     if (status == 404) {
       updateDocValue(scholarDB, scholar_id, '404_response', TRUE)
       updateDocValue(scholarDB, scholar_id, 'source_gsid', gsid)
+      updateDocValue(scholarDB, scholar_id, 'completeness', 1)
       updateDocValue(scholarDB, scholar_id, 'gsid', NULL)
     }
     msg <- "{status} Response for scholar id: {scholar_id} **** GSID: {gsid}"

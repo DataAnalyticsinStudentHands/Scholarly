@@ -8,8 +8,11 @@ source("scrape_requirements.R")
 hosturl = set_parameter("MONGOURL")
 project_dir = set_parameter("PROJECT_DIR", getwd())
 log_tmp_dir = file.path(project_dir,'log')
-collection_suffix = set_parameter("COLLECTION_SUFFIX")
+collection_suffix = set_parameter("COLLECTION_SUFFIX", NULL)
 farmer_id = set_parameter("FARMER_ID", Sys.info()["nodename"][[1]])
+
+#Note - This could cause someone problems if they are not using multiple computers simultaneously, but mid-stream switch between computers... Not sure how it should default?
+enableFarmerFilter = TRUE
 
 #Define mongo connections
 
@@ -36,7 +39,11 @@ log_open(log, logdir=F)
     
     updateStatus(scholar_ids)
     
+    if (enableFarmerFilter == TRUE) {
     query = sprintf('{ "$or" : [ { "farmer" : "%s" }, { "farmer" : null } ], "$nor" : [ { "completeness" : { "$gte" : 1.0 } }, { "dup_gsid_flag" : true }, { "404_response" : { "$exists" : true } } ] }', farmer_id)
+    } else {
+      query = '{"$nor" : [ { "completeness" : { "$gte" : 1.0 } }, { "dup_gsid_flag" : true }, { "404_response" : { "$exists" : true } } ] }'
+    }
     scholar_ids <- scholarDB$find(query = query,
                                   fields = '{"_id" : true, "gsid" : true, "farmer" : true}',
                                   limit = 10)
@@ -61,7 +68,7 @@ log_open(log, logdir=F)
     scholar_id <- scholar_ids$id[scholar.n]
     gsid <- scholar_ids$gsid[scholar.n]
     
-    collect_scholar(id, gsid, log_tmp_dir=log_tmp_dir)
+    collect_scholar(scholar_id, gsid, log_tmp_dir=log_tmp_dir)
     
     log_print(paste('Completed scholar gsid:', gsid, '- Query', scholar.n, '/', n_scholars))
     Sys.sleep(sample(4:14, 1))

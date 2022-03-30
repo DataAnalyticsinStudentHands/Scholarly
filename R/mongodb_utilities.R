@@ -12,9 +12,9 @@ connect_mongo <- function(collection, suffix, url=hosturl) {
   if(!exists("hosturl")){
     url="mongodb://localhost/scholarly"
   }
-  host <- str_extract(url, '(?<=(mongodb://))\\w+')
+  host <- stringr::str_extract(url, '(?<=(mongodb://))\\w+')
   
-  if(missing(suffix)){
+  if(missing(suffix) || any(is.null(suffix) || is.na(suffix)) ){
     target_collection <- collection
   } else {
     target_collection <- paste(collection, suffix, sep = "_")

@@ -9,7 +9,6 @@ library(jsonlite)
 `%!in%` <- Negate(`%in%`)
 
 
-
 #Source custom functions
 scripts <- list.files('R', full.names = T)
 for(script in scripts){

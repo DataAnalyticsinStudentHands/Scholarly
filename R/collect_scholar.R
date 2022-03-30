@@ -54,7 +54,7 @@ collect_scholar <- function(scholar_id, gsid, log_tmp_dir, fetch_profile=TRUE, f
           } else {
             pubs_to_query <- profile_pubs_list
         }
-      pubs_to_query %<>% sample_n(3) #For testing/debugging purposes only.
+      # pubs_to_query %<>% sample_n(3) #For testing/debugging purposes only.
       
       pub.n <- 0
       num_pubs <- length(pubs_to_query$pubid)

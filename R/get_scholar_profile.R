@@ -4,7 +4,12 @@ get_scholar_profile <-  function (page, source_gsid, scholar_id, fetch_coauthors
   # page <- get_scholar_resp(url) %>% read_html()
   # page <- httr::GET(url) %>% read_html()
   tables <- page %>% html_table()
-  if(length(tables) == 0) {updateDocValue(scholarDB, scholar_id, '404_response', TRUE); return(NULL)}
+  if (length(tables) == 0) {
+    updateDocValue(scholarDB, scholar_id, '404_response', TRUE)
+    updateDocValue(scholarDB, scholar_id, 'completeness', 1)
+    return(NULL)
+  }
+  
   stats <- tables[[1]]
   rows <- nrow(stats)
   gsid <- page %>% 
