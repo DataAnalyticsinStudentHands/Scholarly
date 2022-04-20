@@ -33,16 +33,16 @@ log_open(log, logdir=F)
   #Get list of scholar ID from MongoDB to query
   #A query filter can be set here to exclude scholars from scraping.
   while(T==T){
-    scholar_ids <- scholarDB$find(query = '{ "$nor" : [ { "completeness" : { "$gte" : 1.0 } } ], "farmer" : { "$exists" : true } }',
+    scholar_ids <- scholarDB$find(query = '{ "$nor" : [ { "completeness" : { "$gte" : 1.0 } } ], "farmer" : { "$exists" : true }, "gsid" : { "$exists" : true } }',
                                   fields = '{"_id" : true, "gsid" : true}',
                                   limit = 500)
     
     updateStatus(scholar_ids)
     
     if (enableFarmerFilter == TRUE) {
-    query = sprintf('{ "$or" : [ { "farmer" : "%s" }, { "farmer" : null } ], "$nor" : [ { "completeness" : { "$gte" : 1.0 } }, { "dup_gsid_flag" : true }, { "404_response" : { "$exists" : true } } ] }', farmer_id)
+    query = sprintf('{ "$or" : [ { "farmer" : "%s" }, { "farmer" : null } ], "$nor" : [ { "completeness" : { "$gte" : 1.0 } }, { "dup_gsid_flag" : true }, { "404_response" : { "$exists" : true } } ], "gsid" : { "$exists" : true } }', farmer_id)
     } else {
-      query = '{"$nor" : [ { "completeness" : { "$gte" : 1.0 } }, { "dup_gsid_flag" : true }, { "404_response" : { "$exists" : true } } ] }'
+      query = '{"$nor" : [ { "completeness" : { "$gte" : 1.0 } }, { "dup_gsid_flag" : true }, { "404_response" : { "$exists" : true } } ], "gsid" : { "$exists" : true } }'
     }
     scholar_ids <- scholarDB$find(query = query,
                                   fields = '{"_id" : true, "gsid" : true, "farmer" : true}',

@@ -1,6 +1,6 @@
 set_parameter <- function(varname,default) {
   env.var = Sys.getenv(varname)
-  if(env.var != '' & !missing(default)) {
+  if(env.var != '') {
     return(env.var)
   } else if(!missing(default)) {
     return(default)
