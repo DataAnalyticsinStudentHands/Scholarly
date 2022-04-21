@@ -58,6 +58,8 @@ collect_scholar <- function(scholar_id, gsid, log_tmp_dir, fetch_profile=TRUE, f
       
       pub.n <- 0
       num_pubs <- length(pubs_to_query$pubid)
+      
+      #pubid = pubs_to_query$pubid[1] #For Testing only!
       for (pubid in pubs_to_query$pubid) {
         pub.n = pub.n + 1
         log_print(
