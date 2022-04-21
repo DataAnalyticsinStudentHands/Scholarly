@@ -99,7 +99,7 @@ collect_scholar <- function(scholar_id, gsid, log_tmp_dir, fetch_profile=TRUE, f
     error_log <- data.frame(id, gsid,
         error = paste("Error message:", paste(error, collapse = ';')),
         timestamp = Sys.time(),
-        source = "scholar_scrape()"
+        source = "collect_scholar()"
       )
     error_log_filename <-
       file.path(log_tmp_dir, 'scholars_with_errors_log.csv')
