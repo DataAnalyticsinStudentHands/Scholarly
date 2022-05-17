@@ -1,0 +1,1 @@
+doskey scrape=cd %PROJECT_DIR% $T Rscript gs_scrape\scrape_control.R
