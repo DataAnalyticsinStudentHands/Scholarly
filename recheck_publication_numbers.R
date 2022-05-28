@@ -8,9 +8,9 @@ publicationsDB <- connect_mongo('googlePublications')
 
 
   # query <- '{ "$or" : [ { "$and" : [ { "completeness" : { "$lt" : 1.0 } }, { "completeness" : { "$gt" : 0.9 } }, { "manual_verification" : { "$exists" : false } } ] }, { "$and" : [ { "completeness" : { "$gt" : 1.0 } }, { "manual_verification" : { "$exists" : false } } ] } ] }'
-  query <- '{ "$or" : [ { "$and" : [ { "completeness" : { "$lt" : 1.0 } }, { "completeness" : { "$gt" : 0.9 } }, { "manual_verification" : { "$exists" : false } } ] }, { "$and" : [ { "completeness" : { "$gt" : 1.0 } } ] } ] }'
+  query <- '{ "$or" : [ { "$and" : [ { "completeness" : { "$lt" : 1.0 } }, { "completeness" : { "$gt" : 0.5 } }, { "manual_verification" : { "$exists" : false } } ] }, { "$and" : [ { "completeness" : { "$gt" : 1.0 } } ] } ] }'
   scholar_ids <- scholarDB$find(query = query,
-                                fields = '{"_id" : true, "gsid" : true}') 
+                                fields = '{"_id" : true, "gsid" : true}')
   n_docs <- nrow(scholar_ids)
   print(sprintf('Found %d documents with completeness variance matching criteria.', n_docs))
   
@@ -34,25 +34,33 @@ publicationsDB <- connect_mongo('googlePublications')
     if(new_npubs!=old_value){
       updateDocValue(google_profilesDB, gsid, "n_publications", new_npubs)
     }
-    if(new_npubs<pubs_scraped){
-      profile_pubs_list <- scholar_data$pubs[[1]]
-      pubs_in_mongo <- publicationsDB$find(query = gsidquery,
-                                           fields = '{"_id" : true, "gsid" : true, "pubid" : true}')
-      pubs_to_query <- profile_pubs_list %>% anti_join(pubs_in_mongo, by = "pubid")
-      pubs_removed_from_profile <- pubs_in_mongo %>% anti_join(profile_pubs_list, by='pubid') %>% pull(`_id`)
+    
+    profile_pubs_list <- scholar_data$pubs[[1]]
+    pubs_in_mongo <- publicationsDB$find(query = gsidquery,
+                                         fields = '{"_id" : true, "gsid" : true, "pubid" : true}')
+    
+    pubs_removed_from_profile <-
+      pubs_in_mongo %>% anti_join(profile_pubs_list, by = 'pubid') %>% pull(`_id`)
+    
+    if (!identical(pubs_removed_from_profile, character(0)) > 0) {
+      n_removed <- length(pubs_removed_from_profile)
       addRemovalTag(pubs_removed_from_profile)
-
-    } 
+    } else {
+      n_removed <- 0
+    }
+    
       print(
         sprintf(
-          'Query %d of %d : Updated scholar %s. Old value: %d. New value: %d. Number of pubs actually scraped: %d',
+          'Query %d of %d : Updated scholar %s (gsid: %s) Old value: %d. New value: %d. Number of pubs actually scraped: %d. Number of pubs removed from profile: %d',
           n,
           n_docs,
           scholar_id,
+          gsid,
           old_value,
           new_npubs,
-          pubs_scraped
-        )
+          pubs_scraped,
+          n_removed
+          )
       )
       
     Sys.sleep(sample(4:18,1))

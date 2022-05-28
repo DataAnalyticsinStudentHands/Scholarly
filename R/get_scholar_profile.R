@@ -39,7 +39,6 @@ get_scholar_profile <-  function (page, source_gsid, scholar_id, fetch_coauthors
   
   google_scholar_profile <- tibble(
     gsid = gsid,
-    scholar_id = scholar_id,
     last_updated = Sys.time(),
     name = name,
     affiliation = affiliation,

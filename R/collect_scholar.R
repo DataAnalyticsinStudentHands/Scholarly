@@ -6,14 +6,14 @@ collect_scholar <- function(scholar_id, gsid, log_tmp_dir, fetch_profile=TRUE, f
   tryCatch({
     log_print(paste('Fetching scholar gsid:', gsid))
     
-    scholar_data <- scholar_query(source_gsid=gsid,scholar_id=scholar_id)
+    scholar_data <- scholar_query(source_gsid=gsid, scholar_id=scholar_id)
     if(is.null(scholar_data)) return(NULL)
   
     if(fetch_profile){
       #Get google profile page
       
       scholar_profile <- scholar_data$scholar_profile[[1]]
-      scholar_profile %<>% rename(`_id`=gsid)
+      scholar_profile %<>% mutate(`_id`=gsid)
       
       #Handling for updated gsid values - Citation URLs do not redirect
         if ("gsid_updated" %in% colnames(scholar_profile)) {
@@ -26,7 +26,7 @@ collect_scholar <- function(scholar_id, gsid, log_tmp_dir, fetch_profile=TRUE, f
           updateDocValue(scholarDB, scholar_id, "gsid", gsid)
         }
         #Insert profile to MongoDB
-        query = paste0('{"_id" : "', scholar_id, '" }')
+        query = paste0('{"_id" : "', gsid, '" }')
         
         exists <- if(nrow(
           google_profilesDB$find(
@@ -59,7 +59,7 @@ collect_scholar <- function(scholar_id, gsid, log_tmp_dir, fetch_profile=TRUE, f
       pub.n <- 0
       num_pubs <- length(pubs_to_query$pubid)
       
-      #pubid = pubs_to_query$pubid[1] #For Testing only!
+      # pubid = pubs_to_query$pubid[1] #For Testing only!
       for (pubid in pubs_to_query$pubid) {
         pub.n = pub.n + 1
         log_print(
