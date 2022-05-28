@@ -13,7 +13,7 @@ collect_scholar <- function(scholar_id, gsid, log_tmp_dir, fetch_profile=TRUE, f
       #Get google profile page
       
       scholar_profile <- scholar_data$scholar_profile[[1]]
-      scholar_profile %<>% rename(`_id`=scholar_id)
+      scholar_profile %<>% rename(`_id`=gsid)
       
       #Handling for updated gsid values - Citation URLs do not redirect
         if ("gsid_updated" %in% colnames(scholar_profile)) {
