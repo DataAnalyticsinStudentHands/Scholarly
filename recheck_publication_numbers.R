@@ -1,8 +1,8 @@
 #For an unknown reason, sometimes there is different values between the google profile n_pubs and the actual number of publications we get. Usually re-checking the profile resolves this problem, followed by an update for the new correct n_pubs
 
-scholarDB <- connect_mongo('scholars_ERL')
-google_profilesDB <- connect_mongo('googleProfiles')
-publicationsDB <- connect_mongo('googlePublications')
+# scholarDB <- connect_mongo('scholars_ERL')
+# google_profilesDB <- connect_mongo('googleProfiles')
+# publicationsDB <- connect_mongo('googlePublications')
 # source('scrape_requirements.R')
 
 
