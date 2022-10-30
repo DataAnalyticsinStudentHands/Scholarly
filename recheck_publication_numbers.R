@@ -8,7 +8,7 @@
 
 
   # query <- '{ "$or" : [ { "$and" : [ { "completeness" : { "$lt" : 1.0 } }, { "completeness" : { "$gt" : 0.9 } }, { "manual_verification" : { "$exists" : false } } ] }, { "$and" : [ { "completeness" : { "$gt" : 1.0 } }, { "manual_verification" : { "$exists" : false } } ] } ] }'
-  query <- '{ "$or" : [ { "$and" : [ { "completeness" : { "$lt" : 1.0 } }, { "completeness" : { "$gt" : 0.5 } }, { "manual_verification" : { "$exists" : false } } ] }, { "$and" : [ { "completeness" : { "$gt" : 1.0 } } ] } ] }'
+  query <- '{ "$or" : [ { "$and" : [ { "completeness" : { "$lt" : 1.0 } }, { "completeness" : { "$gt" : 0 } }, { "manual_verification" : { "$exists" : false } } ] }, { "$and" : [ { "completeness" : { "$gt" : 1.0 } } ] } ] }'
   scholar_ids <- scholarDB$find(query = query,
                                 fields = '{"_id" : true, "gsid" : true}')
   n_docs <- nrow(scholar_ids)
