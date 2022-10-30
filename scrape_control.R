@@ -1,7 +1,6 @@
 #Load packages and scripts
 source("scrape_requirements.R")
 
-# collection_suffix <- "ERL" #Option to set manually if not on a farm machine.
 # Authentication and host URL
 #Specify url in environment
 #Sys.setenv(MONGOURL = "mongodb://localhost:27017/scholarball")
@@ -9,6 +8,7 @@ hosturl = set_parameter("MONGOURL")
 project_dir = set_parameter("PROJECT_DIR", getwd())
 log_tmp_dir = file.path(project_dir,'log')
 collection_suffix = set_parameter("COLLECTION_SUFFIX", NULL)
+# collection_suffix <- "ERL" #Option to set manually if not on a farm machine.
 farmer_id = set_parameter("FARMER_ID", Sys.info()["nodename"][[1]])
 
 #Note - This could cause someone problems if they are not using multiple computers simultaneously, but mid-stream switch between computers... Not sure how it should default?

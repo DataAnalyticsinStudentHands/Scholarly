@@ -1,7 +1,7 @@
 scholar_query <- function(source_gsid, scholar_id, fetch_coauthors=TRUE) {
   cstart = 0
   pubs <- data.frame()
-  page <- load_scholar_page(gsid=source_gsid, cstart=cstart)
+  page <- load_scholar_page(gsid=source_gsid, scholar_id=scholar_id, cstart=cstart)
   
   if(is.null(page)) return(NULL)
   pagination_button <- page %>% html_nodes('#gsc_bpf_more') %>% html_attr('disabled') %>% replace(is.na(.), 'enabled')
