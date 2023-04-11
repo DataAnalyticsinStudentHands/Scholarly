@@ -11,4 +11,4 @@ It can be used for bibliometric analysis, calculation of metrics, and more.
 
 Scholarly is designed for unsupervised use and to be distributed across multiple machines (with different IP addresses) to speed the collection process for large tranches of scholar profiles.
 
-[See Scholarball wiki for instructions & technical details](https://github.com/peggylind/ScholarballExtended/wiki)
+[See the documentation for installation information: (https://app.clickup.com/31013036/docs/xje5c-568/xje5c-128)
